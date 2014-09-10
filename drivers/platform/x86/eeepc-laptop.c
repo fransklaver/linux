@@ -351,8 +351,9 @@ static ssize_t show_available_cpufv(struct device *dev,
 	int i;
 	ssize_t len = 0;
 
-	if (get_cpufv(eeepc, &c))
-		return -ENODEV;
+	i = get_cpufv(eeepc, &c);
+	if (i)
+		return i;
 	for (i = 0; i < c.num; i++)
 		len += sprintf(buf + len, "%d ", i);
 	len += sprintf(buf + len, "\n");
@@ -365,9 +366,11 @@ static ssize_t show_cpufv(struct device *dev,
 {
 	struct eeepc_laptop *eeepc = dev_get_drvdata(dev);
 	struct eeepc_cpufv c;
+	int rv;
 
-	if (get_cpufv(eeepc, &c))
-		return -ENODEV;
+	rv = get_cpufv(eeepc, &c);
+	if (rv)
+		return rv;
 	return sprintf(buf, "%#x\n", (c.num << 8) | c.cur);
 }
 
@@ -381,8 +384,9 @@ static ssize_t store_cpufv(struct device *dev,
 
 	if (eeepc->cpufv_disabled)
 		return -EPERM;
-	if (get_cpufv(eeepc, &c))
-		return -ENODEV;
+	rv = get_cpufv(eeepc, &c);
+	if (rv)
+		return rv;
 	rv = parse_arg(buf, &value);
 	if (rv < 0)
 		return rv;
