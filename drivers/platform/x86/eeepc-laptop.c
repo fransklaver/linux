@@ -692,8 +692,9 @@ static int eeepc_register_rfkill_notifier(struct eeepc_laptop *eeepc,
 		 * changed during setup.
 		 */
 		eeepc_rfkill_hotplug(eeepc, handle);
-	} else
+	} else {
 		return -ENODEV;
+	}
 
 	return 0;
 }
