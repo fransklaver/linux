@@ -1060,7 +1060,11 @@ static ssize_t show_sys_hwmon(int (*get)(void), char *buf)
 	EEEPC_SENSOR_STORE_FUNC(_name, _set)				\
 	static DEVICE_ATTR(_name, _mode, show_##_name, store_##_name)
 
-EEEPC_CREATE_SENSOR_ATTR(fan1_input, S_IRUGO, eeepc_get_fan_rpm, NULL);
+#define EEEPC_CREATE_SENSOR_ATTR_RO(_name, _mode, _get)			\
+	EEEPC_SENSOR_SHOW_FUNC(_name, _get)				\
+	static DEVICE_ATTR(_name, _mode, show_##_name, NULL)
+
+EEEPC_CREATE_SENSOR_ATTR_RO(fan1_input, S_IRUGO, eeepc_get_fan_rpm);
 EEEPC_CREATE_SENSOR_ATTR(pwm1, S_IRUGO | S_IWUSR,
 			 eeepc_get_fan_pwm, eeepc_set_fan_pwm);
 EEEPC_CREATE_SENSOR_ATTR(pwm1_enable, S_IRUGO | S_IWUSR,
