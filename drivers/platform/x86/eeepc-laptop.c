@@ -392,7 +392,9 @@ static ssize_t store_cpufv(struct device *dev,
 		return rv;
 	if (value < 0 || value >= c.num)
 		return -EINVAL;
-	set_acpi(eeepc, CM_ASL_CPUFV, value);
+	rv = set_acpi(eeepc, CM_ASL_CPUFV, value);
+	if (rv)
+		return rv;
 	return count;
 }
 
