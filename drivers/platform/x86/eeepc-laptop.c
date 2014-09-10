@@ -1425,8 +1425,9 @@ static int eeepc_acpi_add(struct acpi_device *device)
 		result = eeepc_backlight_init(eeepc);
 		if (result)
 			goto fail_backlight;
-	} else
+	} else {
 		pr_info("Backlight controlled by ACPI video driver\n");
+	}
 
 	result = eeepc_input_init(eeepc);
 	if (result)
