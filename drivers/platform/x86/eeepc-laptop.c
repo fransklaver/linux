@@ -215,9 +215,9 @@ static int set_acpi(struct eeepc_laptop *eeepc, int cm, int value)
 	const char *method = cm_setv[cm];
 
 	if (method == NULL)
-		return -ENODEV;
+		return -ENXIO;
 	if ((eeepc->cm_supported & (0x1 << cm)) == 0)
-		return -ENODEV;
+		return -ENXIO;
 
 	if (write_acpi_int(eeepc->handle, method, value))
 		pr_warn("Error writing %s\n", method);
@@ -230,9 +230,9 @@ static int get_acpi(struct eeepc_laptop *eeepc, int cm)
 	int value;
 
 	if (method == NULL)
-		return -ENODEV;
+		return -ENXIO;
 	if ((eeepc->cm_supported & (0x1 << cm)) == 0)
-		return -ENODEV;
+		return -ENXIO;
 
 	if (read_acpi_int(eeepc->handle, method, &value))
 		pr_warn("Error reading %s\n", method);
@@ -527,7 +527,7 @@ static int eeepc_led_init(struct eeepc_laptop *eeepc)
 {
 	int rv;
 
-	if (get_acpi(eeepc, CM_ASL_TPD) == -ENODEV)
+	if (get_acpi(eeepc, CM_ASL_TPD) == -ENXIO)
 		return 0;
 
 	eeepc->led_workqueue = create_singlethread_workqueue("led_workqueue");
