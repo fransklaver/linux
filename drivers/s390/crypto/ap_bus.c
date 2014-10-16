@@ -1013,7 +1013,7 @@ static ssize_t ap_domain_show(struct bus_type *bus, char *buf)
 	return snprintf(buf, PAGE_SIZE, "%d\n", ap_domain_index);
 }
 
-static BUS_ATTR(ap_domain, 0444, ap_domain_show, NULL);
+static BUS_ATTR_RO(ap_domain);
 
 static ssize_t ap_control_domain_mask_show(struct bus_type *bus, char *buf)
 {
@@ -1034,8 +1034,7 @@ static ssize_t ap_control_domain_mask_show(struct bus_type *bus, char *buf)
 	  }
 }
 
-static BUS_ATTR(ap_control_domain_mask, 0444,
-		ap_control_domain_mask_show, NULL);
+static BUS_ATTR_RO(ap_control_domain_mask);
 
 static ssize_t ap_config_time_show(struct bus_type *bus, char *buf)
 {
@@ -1048,10 +1047,10 @@ static ssize_t ap_interrupts_show(struct bus_type *bus, char *buf)
 			ap_using_interrupts() ? 1 : 0);
 }
 
-static BUS_ATTR(ap_interrupts, 0444, ap_interrupts_show, NULL);
+static BUS_ATTR_RO(ap_interrupts);
 
-static ssize_t ap_config_time_store(struct bus_type *bus,
-				    const char *buf, size_t count)
+static ssize_t config_time_store(struct bus_type *bus,
+				 const char *buf, size_t count)
 {
 	int time;
 
@@ -1066,15 +1065,15 @@ static ssize_t ap_config_time_store(struct bus_type *bus,
 	return count;
 }
 
-static BUS_ATTR(config_time, 0644, ap_config_time_show, ap_config_time_store);
+static BUS_ATTR_RW(config_time);
 
-static ssize_t ap_poll_thread_show(struct bus_type *bus, char *buf)
+static ssize_t poll_thread_show(struct bus_type *bus, char *buf)
 {
 	return snprintf(buf, PAGE_SIZE, "%d\n", ap_poll_kthread ? 1 : 0);
 }
 
-static ssize_t ap_poll_thread_store(struct bus_type *bus,
-				    const char *buf, size_t count)
+static ssize_t poll_thread_store(struct bus_type *bus,
+				 const char *buf, size_t count)
 {
 	int flag, rc;
 
@@ -1090,7 +1089,7 @@ static ssize_t ap_poll_thread_store(struct bus_type *bus,
 	return count;
 }
 
-static BUS_ATTR(poll_thread, 0644, ap_poll_thread_show, ap_poll_thread_store);
+static BUS_ATTR_RW(poll_thread);
 
 static ssize_t poll_timeout_show(struct bus_type *bus, char *buf)
 {
@@ -1118,7 +1117,7 @@ static ssize_t poll_timeout_store(struct bus_type *bus, const char *buf,
 	return count;
 }
 
-static BUS_ATTR(poll_timeout, 0644, poll_timeout_show, poll_timeout_store);
+static BUS_ATTR_RW(poll_timeout);
 
 static struct bus_attribute *const ap_bus_attrs[] = {
 	&bus_attr_ap_domain,
