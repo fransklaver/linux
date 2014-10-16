@@ -414,13 +414,13 @@ static int rbd_img_request_submit(struct rbd_img_request *img_request);
 
 static void rbd_dev_device_release(struct device *dev);
 
-static ssize_t rbd_add(struct bus_type *bus, const char *buf,
+static ssize_t add_store(struct bus_type *bus, const char *buf,
 		       size_t count);
-static ssize_t rbd_remove(struct bus_type *bus, const char *buf,
+static ssize_t remove_store(struct bus_type *bus, const char *buf,
 			  size_t count);
-static ssize_t rbd_add_single_major(struct bus_type *bus, const char *buf,
+static ssize_t add_single_major_store(struct bus_type *bus, const char *buf,
 				    size_t count);
-static ssize_t rbd_remove_single_major(struct bus_type *bus, const char *buf,
+static ssize_t remove_single_major_store(struct bus_type *bus, const char *buf,
 				       size_t count);
 static int rbd_dev_image_probe(struct rbd_device *rbd_dev, bool mapping);
 static void rbd_spec_put(struct rbd_spec *spec);
@@ -435,10 +435,10 @@ static int minor_to_rbd_dev_id(int minor)
 	return minor >> RBD_SINGLE_MAJOR_PART_SHIFT;
 }
 
-static BUS_ATTR(add, S_IWUSR, NULL, rbd_add);
-static BUS_ATTR(remove, S_IWUSR, NULL, rbd_remove);
-static BUS_ATTR(add_single_major, S_IWUSR, NULL, rbd_add_single_major);
-static BUS_ATTR(remove_single_major, S_IWUSR, NULL, rbd_remove_single_major);
+static BUS_ATTR_WO(add);
+static BUS_ATTR_WO(remove);
+static BUS_ATTR_WO(add_single_major);
+static BUS_ATTR_WO(remove_single_major);
 
 static struct attribute *rbd_bus_attrs[] = {
 	&bus_attr_add.attr,
@@ -3669,7 +3669,7 @@ static void rbd_dev_update_size(struct rbd_device *rbd_dev)
 	/*
 	 * Don't hold the lock while doing disk operations,
 	 * or lock ordering will conflict with the bdev mutex via:
-	 * rbd_add() -> blkdev_get() -> rbd_open()
+	 * add_store() -> blkdev_get() -> rbd_open()
 	 */
 	spin_lock_irq(&rbd_dev->lock);
 	removing = test_bit(RBD_DEV_FLAG_REMOVING, &rbd_dev->flags);
@@ -5491,9 +5491,9 @@ err_out_module:
 	return (ssize_t)rc;
 }
 
-static ssize_t rbd_add(struct bus_type *bus,
-		       const char *buf,
-		       size_t count)
+static ssize_t add_store(struct bus_type *bus,
+			 const char *buf,
+			 size_t count)
 {
 	if (single_major)
 		return -EINVAL;
@@ -5501,9 +5501,9 @@ static ssize_t rbd_add(struct bus_type *bus,
 	return do_rbd_add(bus, buf, count);
 }
 
-static ssize_t rbd_add_single_major(struct bus_type *bus,
-				    const char *buf,
-				    size_t count)
+static ssize_t add_single_major_store(struct bus_type *bus,
+				      const char *buf,
+				      size_t count)
 {
 	return do_rbd_add(bus, buf, count);
 }
@@ -5611,9 +5611,9 @@ static ssize_t do_rbd_remove(struct bus_type *bus,
 	return count;
 }
 
-static ssize_t rbd_remove(struct bus_type *bus,
-			  const char *buf,
-			  size_t count)
+static ssize_t remove_store(struct bus_type *bus,
+			    const char *buf,
+			    size_t count)
 {
 	if (single_major)
 		return -EINVAL;
@@ -5621,9 +5621,9 @@ static ssize_t rbd_remove(struct bus_type *bus,
 	return do_rbd_remove(bus, buf, count);
 }
 
-static ssize_t rbd_remove_single_major(struct bus_type *bus,
-				       const char *buf,
-				       size_t count)
+static ssize_t remove_single_major_store(struct bus_type *bus,
+					 const char *buf,
+					 size_t count)
 {
 	return do_rbd_remove(bus, buf, count);
 }
