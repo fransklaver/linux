@@ -1883,10 +1883,11 @@ EXPORT_SYMBOL(tcf_destroy_chain);
 #ifdef CONFIG_PROC_FS
 static int psched_show(struct seq_file *seq, void *v)
 {
-	seq_printf(seq, "%08x %08x %08x %08x\n",
-		   (u32)NSEC_PER_USEC, (u32)PSCHED_TICKS2NS(1),
-		   1000000,
-		   (u32)NSEC_PER_SEC / hrtimer_resolution);
+	seq_printf(seq, "%08lx %08lx %08lx %08lx\n",
+		   (long unsigned int)NSEC_PER_USEC,
+		   (long unsigned int)PSCHED_TICKS2NS(1),
+		   (long unsigned int)1000000,
+		   (long unsigned int)NSEC_PER_SEC / hrtimer_resolution);
 
 	return 0;
 }
