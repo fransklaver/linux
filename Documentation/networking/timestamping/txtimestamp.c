@@ -96,7 +96,7 @@ static void __print_timestamp(const char *name, struct timespec *cur,
 		prev_ms = (long) ts_prev.tv_sec * 1000 * 1000;
 		prev_ms += ts_prev.tv_nsec / 1000;
 
-		fprintf(stderr, "  (%+ld us)", cur_ms - prev_ms);
+		fprintf(stderr, "  (%+lld us)", (long long int)cur_ms - prev_ms);
 	}
 
 	ts_prev = *cur;
