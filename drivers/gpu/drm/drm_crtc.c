@@ -4314,25 +4314,6 @@ void drm_property_unreference_blob(struct drm_property_blob *blob)
 EXPORT_SYMBOL(drm_property_unreference_blob);
 
 /**
- * drm_property_unreference_blob_locked - Unreference a blob property with blob_lock held
- *
- * Drop a reference on a blob property. May free the object. This must be
- * called with blob_lock held.
- *
- * @param dev  Device the blob was created on
- * @param blob Pointer to blob property
- */
-static void drm_property_unreference_blob_locked(struct drm_property_blob *blob)
-{
-	if (!blob)
-		return;
-
-	DRM_DEBUG("%p: blob ID: %d (%d)\n", blob, blob->base.id, atomic_read(&blob->refcount.refcount));
-
-	kref_put(&blob->refcount, drm_property_free_blob);
-}
-
-/**
  * drm_property_reference_blob - Take a reference on an existing property
  *
  * Take a new reference on an existing blob property.
