@@ -541,7 +541,7 @@ static void prb_init_blk_timer(struct packet_sock *po,
 	pkc->retire_blk_timer.expires = jiffies;
 }
 
-static void prb_setup_retire_blk_timer(struct packet_sock *po)
+static void prb_setup_retire_blk_rx_timer(struct packet_sock *po)
 {
 	prb_init_blk_timer(po, GET_PBDQC_FROM_RB(&po->rx_ring),
 			   prb_retire_rx_blk_timer_expired);
@@ -626,7 +626,7 @@ static void init_prb_bdqc(struct packet_sock *po,
 
 	p1->max_frame_len = p1->kblk_size - BLK_PLUS_PRIV(p1->blk_sizeof_priv);
 	prb_init_ft_ops(p1, req_u);
-	prb_setup_retire_blk_timer(po);
+	prb_setup_retire_blk_rx_timer(po);
 	prb_open_block(p1, pbd);
 }
 
